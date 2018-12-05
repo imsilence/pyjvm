@@ -66,4 +66,4 @@ class Cmd(object):
         print("Version 1.0")
 
     def __repr__(self):
-        return '<{0}>{1}'.format(self.__class__.__name__, vars(self))
+        return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))

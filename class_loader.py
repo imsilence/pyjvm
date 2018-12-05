@@ -2,7 +2,7 @@
 
 import os
 
-from class_path import EntryFactory, EntryException
+from classpath.class_path import EntryFactory, EntryException
 
 class ClassLoaderException(Exception):
     pass

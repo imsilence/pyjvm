@@ -8,7 +8,10 @@ from jvm import JVM
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s: %(message)s')
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s - %(name)s - %(levelname)s: %(message)s'
+    )
     cmd = Cmd.parse(sys.argv[1:])
     if cmd.version_flag:
         cmd.version()
