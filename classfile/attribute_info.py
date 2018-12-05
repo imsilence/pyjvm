@@ -22,8 +22,6 @@ class AttributeFactory(object):
 
             clazz = globals().get('Attribute{0}Info'.format(attr_name), AttributeUnparsedInfo)
 
-            print(attr_name, clazz)
-
             instance = clazz(int(attr_length), constant_pool)
             instance.read(reader)
             attrs.append(instance)
