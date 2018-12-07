@@ -32,7 +32,7 @@ class Cmd(object):
 
     @property
     def clazz(self):
-        return self.__clazz
+        return self.__clazz.replace('.', '/')
 
     @property
     def args(self):

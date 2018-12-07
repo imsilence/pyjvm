@@ -2,7 +2,7 @@
 
 from abc import ABC
 
-from .attribute_info import AttributeFactory
+from .attribute_info import AttributeFactory, AttributeCodeInfo
 
 class MemberFactory(object):
 
@@ -46,6 +46,13 @@ class Member(ABC):
         self.__name_index = reader.read_16_byte()
         self.__descriptor_index = reader.read_16_byte()
         self.__attrs = AttributeFactory.parse(reader, self.__constant_pool)
+
+    @property
+    def code_attr(self):
+        for attr in self.attrs:
+            if isinstance(attr, AttributeCodeInfo):
+                return attr
+        return None
 
     def __repr__(self):
         return '{0!r} {1!r} {2!r}'.format(self.name, int(self.access_flags), self.descriptor)

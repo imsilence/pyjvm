@@ -12,10 +12,10 @@ class ByteSize(Enum):
 
 class ClassByte(object):
 
-    def __init__(self, byte, start, length):
+    def __init__(self, byte, start, end):
         self.__byte = byte
         self.__start = start
-        self.__end = start + length
+        self.__end = end
 
     @property
     def byte(self):
@@ -55,11 +55,23 @@ class ClassReader(object):
         self.__index = 0
         self.__data = data
 
+    @property
+    def index(self):
+        return self.__index
+
+    @index.setter
+    def index(self, index):
+        self.__index = index
+
     def read_byte(self, n):
-        val = ClassByte(self.__data[:n], self.__index, n)
-        self.__data = self.__data[n:]
-        self.__index += n
+        end = self.__index + n
+        val = ClassByte(self.__data[self.__index:end], self.__index, end)
+        self.__index = end
         return val
+
+    def skip_padding(self):
+        if self.__index % 4 != 0:
+            self.read_8_byte()
 
     def read_8_byte(self):
         return self.read_byte(ByteSize.U1.value)
@@ -73,10 +85,22 @@ class ClassReader(object):
     def read_64_byte(self):
         return self.read_byte(ByteSize.U8.value)
 
-    def read_16_bytes(self):
-        n = int(self.read_16_byte())
+    def read_bytes(self, count, size=ByteSize.U1.value):
         vals = []
-        while n > 0:
-            vals.append(self.read_16_byte())
-            n -= 1
+        while count > 0:
+            vals.append(self.read_byte(size))
+            count -= 1
         return vals
+
+    def read_8_bytes(self, n=None):
+        return self.read_bytes(n, ByteSize.U1.value)
+
+    def read_16_bytes(self, n=None):
+        n = int(self.read_16_byte()) if n is None else n
+        return self.read_bytes(n, ByteSize.U2.value)
+
+    def read_32_bytes(self, n=None):
+        return self.read_bytes(n, ByteSize.U3.value)
+
+    def read_64_bytes(self, n=None):
+        return self.read_bytes(n, ByteSize.U4.value)

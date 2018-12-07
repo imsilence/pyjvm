@@ -2,6 +2,7 @@
 
 from class_loader import ClassLoader
 from classfile.class_file import ClassFile
+from interpreter import interpret
 
 class JVM(object):
 
@@ -35,12 +36,17 @@ class JVM(object):
                 print('\t\t', idx, attr)
 
         print('methods: ', len(class_file.methods))
+        main_method = None
         for idx, method in enumerate(class_file.methods):
             print('\t', idx, method)
+            if method.name == 'main' and method.descriptor == '([Ljava/lang/String;)V':
+                main_method = method
             for idx, attr in enumerate(method.attrs):
                 print('\t\t', idx, attr)
-
 
         print('attrs: ', len(class_file.attrs))
         for idx, attr in enumerate(class_file.attrs):
             print('\t', idx, attr)
+
+        if main_method:
+            interpret(main_method)

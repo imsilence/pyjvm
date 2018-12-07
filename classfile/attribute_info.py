@@ -78,6 +78,18 @@ class AttributeCodeInfo(AttributeInfo):
         self.__attrs = AttributeFactory.parse(reader, self.constant_pool)
 
     @property
+    def max_stack(self):
+        return int(self.__max_stack)
+
+    @property
+    def max_locals(self):
+        return int(self.__max_locals)
+
+    @property
+    def code(self):
+        return self.__code
+
+    @property
     def val(self):
         return int(self.__max_stack), int(self.__max_locals), self.__code, self.__exceptions, self.__attrs
 

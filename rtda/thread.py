@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 from .stack import Stack
+from .frame import Frame
 
 class Thread(object):
 
@@ -16,11 +17,14 @@ class Thread(object):
     def pc(self, pc):
         self.__pc = pc
 
+    def create_frame(self, max_stack, max_locals):
+        return Frame(max_stack, max_locals, self)
+
     def push_frame(self, frame):
-        self.__jstack.push(frame)
+        self.__stack.push(frame)
 
     def pop_frame(self):
-        return self.__jstack.pop()
+        return self.__stack.pop()
 
     def current_frame(self):
-        return self.__jstack.top()
+        return self.__stack.top()
