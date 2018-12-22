@@ -1,18 +1,18 @@
 #encoding: utf-8
 
-from class_loader import ClassLoader
-from classfile.class_file import ClassFile
+from classpath import ClassPath
+from classfile import ClassFile
 from interpreter import interpret
 
 class JVM(object):
 
     def __init__(self, cmd):
         self.__cmd = cmd
-        self.__class_loader = ClassLoader(cmd.jre_path, cmd.class_path)
+        self.__class_path = ClassPath(cmd.jre_path, cmd.class_path)
 
 
     def start(self):
-        class_file = ClassFile.parse(self.__class_loader.read_class(self.__cmd.clazz))
+        class_file = ClassFile.parse(self.__class_path.read_class(self.__cmd.clazz))
 
         print('version: ', class_file.version)
 

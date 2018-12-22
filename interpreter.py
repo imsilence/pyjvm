@@ -1,7 +1,7 @@
 #encoding: utf-8
 
-from rtda.thread import Thread
-from classfile.class_reader import ClassReader
+from rtda import Thread
+from classfile import ClassReader
 from instructions import InstructionFactory
 
 def interpret(method):
@@ -25,7 +25,7 @@ def interpret(method):
 def loop(thread, code):
     frame = thread.pop_frame()
     reader = ClassReader(code.byte)
-    print(repr(code.byte))
+
     while True:
         pc = frame.next_pc
         thread.pc = pc

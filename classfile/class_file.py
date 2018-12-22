@@ -43,7 +43,7 @@ class ClassFile(object):
 
     @property
     def access_flags(self):
-        return int(self.__access_flags)
+        return self.__access_flags
 
     @property
     def fields(self):
