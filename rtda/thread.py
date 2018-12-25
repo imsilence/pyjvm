@@ -9,22 +9,28 @@ class Thread(object):
         self.__pc = 0
         self.__stack = Stack()
 
+
     @property
     def pc(self):
         return self.__pc
+
 
     @pc.setter
     def pc(self, pc):
         self.__pc = pc
 
-    def create_frame(self, max_stack, max_locals):
-        return Frame(max_stack, max_locals, self)
+
+    def create_frame(self, method):
+        return Frame(self, method)
+
 
     def push_frame(self, frame):
         self.__stack.push(frame)
 
+
     def pop_frame(self):
         return self.__stack.pop()
+
 
     def current_frame(self):
         return self.__stack.top()

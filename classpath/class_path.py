@@ -3,10 +3,7 @@
 import os
 
 from .entry import EntryFactory, EntryException
-
-class ClassPathException(Exception):
-    pass
-
+from .exceptions import ClassPathException
 
 class ClassPath(object):
 
@@ -21,7 +18,6 @@ class ClassPath(object):
         self.__entries.append(__boot_entry)
         self.__entries.append(__ext_entry)
         self.__entries.append(__user_entry)
-
 
     def __get_jre_path(self, jre_path):
         if "" != jre_path and os.path.exists(jre_path):

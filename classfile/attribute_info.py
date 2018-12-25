@@ -36,30 +36,37 @@ class AttributeInfo(ABC):
         self.__constant_pool = constant_pool
         self.__val = None
 
+
     def __len__(self):
         return self.__length
+
 
     @property
     def val(self):
         return self.__val
 
+
     @val.setter
     def val(self, value):
         self.__val = value
+
 
     @property
     def constant_pool(self):
         return self.__constant_pool
 
+
     @abstractmethod
     def read(cls, reader):
         return None
+
 
     def __repr__(self):
         return '<{0!r}>{1!r}'.format(self.__class__.__name__, self.val)
 
 
 class AttributeCodeInfo(AttributeInfo):
+
     def __init__(self, length, constant_pool):
         super(AttributeCodeInfo, self).__init__(length, constant_pool)
         self.__max_stack = 0
@@ -67,6 +74,7 @@ class AttributeCodeInfo(AttributeInfo):
         self.__code = None
         self.__exceptions = []
         self.__attrs = []
+
 
     def read(self, reader):
         self.__max_stack = reader.read_16_byte()
@@ -77,17 +85,21 @@ class AttributeCodeInfo(AttributeInfo):
         self.__exceptions = ExceptionTableEntryFactory.parse(reader)
         self.__attrs = AttributeFactory.parse(reader, self.constant_pool)
 
+
     @property
     def max_stack(self):
         return int(self.__max_stack)
+
 
     @property
     def max_locals(self):
         return int(self.__max_locals)
 
+
     @property
     def code(self):
         return self.__code
+
 
     @property
     def val(self):
@@ -95,12 +107,20 @@ class AttributeCodeInfo(AttributeInfo):
 
 
 class AttributeConstantValueInfo(AttributeInfo):
+
     def __init__(self, length, constant_pool):
         super(AttributeConstantValueInfo, self).__init__(length, constant_pool)
         self.__constant_value_index = 0
 
+
     def read(self, reader):
         self.__constant_value_index = reader.read_16_byte()
+
+
+    @property
+    def constant_value_index(self):
+        return self.__constant_value_index
+
 
     @property
     def val(self):
@@ -125,8 +145,10 @@ class AttributeSourceFileInfo(AttributeInfo):
         super(AttributeSourceFileInfo, self).__init__(length, constant_pool)
         self.__source_file_index = 0
 
+
     def read(self, reader):
         self.__source_file_index = reader.read_16_byte()
+
 
     @property
     def val(self):
@@ -134,6 +156,7 @@ class AttributeSourceFileInfo(AttributeInfo):
 
 
 class AttributeSyntheticInfo(AttributeInfo):
+
     def read(self, reader):
         self.val = None
 
@@ -150,8 +173,10 @@ class AttributeLineNumberTableInfo(AttributeInfo):
         super(AttributeLineNumberTableInfo, self).__init__(length, constant_pool)
         self.__line_numbers = []
 
+
     def read(self, reader):
         self.__line_numbers = LineNumberTableEntryFactory.parse(reader)
+
 
     @property
     def val(self):

@@ -104,3 +104,6 @@ class ClassReader(object):
 
     def read_64_bytes(self, n=None):
         return self.read_bytes(n, ByteSize.U4.value)
+
+    def data(self):
+        return self.__data[self.__index:]

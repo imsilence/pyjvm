@@ -1,30 +1,27 @@
 #encoding: utf-8
+import traceback
 
 from rtda import Thread
 from classfile import ClassReader
 from instructions import InstructionFactory
 
 def interpret(method):
-    max_stack = method.code_attr.max_stack
-    max_locals = method.code_attr.max_locals
-    code = method.code_attr.code
-
     thread = Thread()
-    frame = thread.create_frame(max_stack, max_locals)
+    frame = thread.create_frame(method)
     thread.push_frame(frame)
     try:
-        loop(thread, code)
+        loop(thread, method.code)
     except Exception as e:
-        import traceback
         print(e)
         print(traceback.format_exc())
     finally:
         print(frame.stack)
         print(frame.localvars)
 
+
 def loop(thread, code):
     frame = thread.pop_frame()
-    reader = ClassReader(code.byte)
+    reader = ClassReader(code)
 
     while True:
         pc = frame.next_pc

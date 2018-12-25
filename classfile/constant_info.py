@@ -4,10 +4,9 @@ import logging
 from enum import Enum
 from abc import ABC, abstractmethod
 
-logger = logging.getLogger(__name__)
+from .exceptions import ConstantInfoNotFoundException
 
-class ConstantInfoNotFoundException(Exception):
-    pass
+logger = logging.getLogger(__name__)
 
 
 class ConstantTag(Enum):
@@ -40,12 +39,12 @@ class ConstantInfoFactory(object):
 
         tag = ConstantTag(byte)
 
-        clazz_name = 'Constant{0}Info'.format(tag.name)
-        clazz = globals().get(clazz_name, None)
+        class_name = 'Constant{0}Info'.format(tag.name)
+        clazz = globals().get(class_name, None)
 
         if clazz is None:
             logger.critical("not found ConstantInfo for {0}".format(tag.name))
-            raise ConstantInfoNotFoundException("class not found[{0}]".format(clazz_name))
+            raise ConstantInfoNotFoundException("class not found[{0}]".format(class_name))
         else:
             instance = clazz(constant_pool)
             instance.read(reader)
@@ -57,9 +56,11 @@ class ConstantPool(object):
     def __init__(self):
         self.__infos = []
 
+
     @property
     def infos(self):
         return self.__infos
+
 
     @classmethod
     def parse(cls, reader):
@@ -89,17 +90,21 @@ class ConstantInfo(ABC):
         self.__constant_pool = constant_pool
         self.__val = None
 
+
     @property
     def val(self):
         return self.__val
+
 
     @val.setter
     def val(self, value):
         self.__val = value
 
+
     @property
     def constant_pool(self):
         return self.__constant_pool
+
 
     @abstractmethod
     def read(self, reader):
@@ -148,8 +153,10 @@ class ConstantClassInfo(ConstantInfo):
         super(ConstantClassInfo, self).__init__(constant_pool)
         self.__name_index = 0
 
+
     def read(self, reader):
         self.__name_index = reader.read_16_byte()
+
 
     @property
     def val(self):
@@ -162,13 +169,14 @@ class ConstantStringInfo(ConstantInfo):
         super(ConstantStringInfo, self).__init__(constant_pool)
         self.__index = 0
 
+
     def read(self, reader):
         self.__index = reader.read_16_byte()
+
 
     @property
     def val(self):
         return self.constant_pool[self.__index].val
-
 
 
 class ConstantNameAndTypeInfo(ConstantInfo):
@@ -178,17 +186,21 @@ class ConstantNameAndTypeInfo(ConstantInfo):
         self.__name_index = 0
         self.__descriptor_index = 0
 
+
     def read(self, reader):
         self.__name_index = int(reader.read_16_byte())
         self.__descriptor_index = int(reader.read_16_byte())
+
 
     @property
     def name(self):
         return self.constant_pool[self.__name_index].val
 
+
     @property
     def descriptor(self):
         return self.constant_pool[self.__descriptor_index].val
+
 
     @property
     def val(self):
@@ -202,17 +214,21 @@ class ConstantRefInfo(ConstantInfo):
         self.__class_index = 0
         self.__name_and_type_index = 0
 
+
     def read(self, reader):
         self.__class_index = reader.read_16_byte()
         self.__name_and_type_index = reader.read_16_byte()
+
 
     @property
     def class_name(self):
         return self.constant_pool[self.__class_index].val
 
+
     @property
     def name_and_type(self):
         return self.constant_pool[self.__name_and_type_index].val
+
 
     @property
     def val(self):
