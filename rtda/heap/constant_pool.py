@@ -141,7 +141,7 @@ class FieldRef(MemberRef):
             field = self.lookup(clazz, self.name, self.descriptor)
 
             if not field.is_accessible(pclazz):
-                raise  IllegalAccessException('class {0} not vist method {1}.{2} access'.format(pclazz.name, clazz.name, self.name))
+                raise  IllegalAccessException('class {0} not vist field {1}.{2} access'.format(pclazz.name, clazz.name, self.name))
             self.__field = field
 
         return self.__field
@@ -162,21 +162,64 @@ class MethodRef(MemberRef):
 
     @method.setter
     def method(self, method):
-        self.__method = method
+        if self.__method is None:
+            pclazz = self.constant_pool.clazz
+            clazz = self.clazz
+
+            if clazz.is_interface:
+                raise IllegalAccessException("method {0}.{1} is interface".format(clazz.name, self.name))
+
+            method = self.lookup(clazz, self.name, self.descriptor)
+            if method is None:
+                raise IllegalAccessException("method {0}.{1} is not found".format(clazz.name, self.name))
+
+            if not method.is_accessible(pclazz):
+                raise IllegalAccessException("class {0} not vist method {1}.{2} access".format(pclazz.name, clazz.name, self.name))
+            self.__method = method
+
+        return self.__method
+
+
+    @classmethod
+    def lookup(cls, clazz, name, descriptor):
+        method = cls.lookup_in_class(clazz, name, descriptor)
+        if method is None:
+            method = cls.lookup_in_interfaces(clazz.interfaces, name, descriptor)
+
+        return method
+
+
+    @classmethod
+    def lookup_in_class(cls, clazz, name, descriptor):
+        clazz = self
+        while clazz:
+            for method in clazz.methods:
+                if name == method.name and descriptor == method.descriptor:
+                    return method
+        return None
+
+
+    @classmethod
+    def lookup_in_interfaces(cls, interfaces, name, descriptor):
+        for interface in interfaces:
+            for method in interface.methods:
+                if name == method.name and descriptor == method.descriptor:
+                    return method
+
+            method = cls.lookup_in_interfaces(interface.interfaces)
+            if method:
+                return method
+
+        return None
 
 
 class InterfaceMethodRef(MethodRef):
 
-    def __init__(self, constant_pool, ref_info):
-        super(InterfaceMethodRef, self).__init__(constant_pool, ref_info)
-        self.__method = None
+    @classmethod
+    def lookup(cls, interface, name, descriptor):
+        for method in interface.methods:
+            if name == method.name and descriptor == method.descriptor:
+                return method
 
+        return cls.lookup_in_interfaces(interface.interfaces, name, descriptor)
 
-    @property
-    def method(self):
-        return self.__method
-
-
-    @method.setter
-    def method(self, method):
-        self.__method = method

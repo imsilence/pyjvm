@@ -3,6 +3,7 @@
 from ..vars_ import Vars
 
 class Object(object):
+
     def __init__(self, clazz, count):
         self.__clazz = clazz
         self.__fields = Vars(count)

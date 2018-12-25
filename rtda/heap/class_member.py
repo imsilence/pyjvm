@@ -84,6 +84,7 @@ class ClassMethod(ClassMember):
         self.__max_stack = 0
         self.__max_locals = 0
         self.__code = b''
+        self.__signature = None
 
         if method.code_attr:
             self.__max_stack = method.code_attr.max_stack
@@ -104,6 +105,63 @@ class ClassMethod(ClassMember):
     @property
     def code(self):
         return self.__code
+
+
+    @property
+    def signature(self):
+        if self.__signature is None:
+            self.__signature = MethodSignature.parse(self.descriptor)
+
+        return self.__signature
+
+
+class MethodSignature(object):
+
+    def __init__(self):
+        self.__param_types = []
+        self.__return_type = None
+
+
+    @classmethod
+    def parse(self, descriptor):
+        signature = MethodSignature()
+
+        param_desc, return_desc = descriptor.split(')')
+
+        signature.__return_type = return_desc
+
+        param_desc = param_desc[1:]
+
+        param_type = []
+
+        while param_desc:
+            _pox = 0
+            if param_type[0] == 'L':
+                _pox = param_desc.find(';')
+                param_type.append(param_desc[1:_pox])
+                signature.__param_types.append(''.join(param_type))
+                param_type = []
+            elif param_type[0] == '[':
+                param_type.append('[')
+            else:
+                param_type.append(param_type[0])
+                signature.__param_types.append(''.join(param_type))
+                param_type = []
+
+            param_desc = param_desc[_pox + 1:]
+
+        self.__return_type = return_type
+        return signature
+
+
+    @property
+    def param_types(self):
+        return self.__param_types
+
+
+    @property
+    def return_type(self):
+        return self.__return_type
 
 
 

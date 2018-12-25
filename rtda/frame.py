@@ -9,7 +9,7 @@ class Frame(object):
     def __init__(self, thread, method):
         self.__lower = None
         self.__stack = Stack(method.max_stack)
-        self.__local_vars = Vars(method.max_locals)
+        self.__vars = Vars(method.max_locals)
         self.__thread = thread
         self.__method = method
         self.__next_pc = 0
@@ -21,8 +21,8 @@ class Frame(object):
 
 
     @property
-    def localvars(self):
-        return self.__local_vars
+    def vars(self):
+        return self.__vars
 
 
     @property

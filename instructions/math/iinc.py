@@ -15,5 +15,5 @@ class IINC(Instruction):
         self.__const = reader.read_8_byte().int()
 
     def execute(self, frame):
-        frame.localvars[self.__index] += self.__const
+        frame.vars[self.__index] += self.__const
 

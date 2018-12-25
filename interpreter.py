@@ -16,7 +16,7 @@ def interpret(method):
         print(traceback.format_exc())
     finally:
         print(frame.stack)
-        print(frame.localvars)
+        print(frame.vars)
 
 
 def loop(thread, code):

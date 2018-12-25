@@ -9,3 +9,5 @@ from . import instanceof
 from . import checkcast
 from . import invokespecial
 from . import invokevirtual
+from . import invokestatic
+from . import invokeinterface
