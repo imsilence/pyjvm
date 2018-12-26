@@ -44,3 +44,6 @@ class Frame(object):
     def method(self):
         return self.__method
 
+
+    def revert_next_pc(self):
+        self.__next_pc = self.__thread.pc

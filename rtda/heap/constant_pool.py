@@ -40,6 +40,8 @@ class ConstantPool(object):
                 consts.append(MethodRef(self, info))
             elif isinstance(info, ConstantInterfaceMethodrefInfo):
                 consts.append(InterfaceMethodRef(self, info))
+            else:
+                consts.append(None)
 
         return consts
 
@@ -91,6 +93,10 @@ class SymRef(object):
             self.__clazz = clazz
 
         return self.__clazz
+
+
+    def __repr__(self):
+        return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))
 
 
 class ClassRef(SymRef):

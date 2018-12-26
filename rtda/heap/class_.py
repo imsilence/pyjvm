@@ -22,6 +22,7 @@ class Class(AccessMixin):
         self.__instance_var_count = 0
         self.__static_var_count = 0
         self.__static_vars = None
+        self.__inited = False
 
 
     @property
@@ -112,6 +113,19 @@ class Class(AccessMixin):
     @property
     def static_vars(self):
         return self.__static_vars
+    @property
+    def package_name(self):
+        return self.name.rpartition('/')[0]
+
+
+    @property
+    def inited(self):
+        return self.__inited
+
+
+    @inited.setter
+    def inited(self, value=True):
+        self.__inited = value
 
 
     def alloc_static_vars(self):
@@ -120,11 +134,6 @@ class Class(AccessMixin):
 
     def is_accessible(self, clazz):
         return self.is_public or clazz.package_name == self.package_name
-
-
-    @property
-    def package_name(self):
-        return self.name.rpartition('/')[0]
 
 
     def is_subclass(self, clazz):
@@ -176,12 +185,17 @@ class Class(AccessMixin):
         return self.get_static_method('main', '([Ljava/lang/String;)V')
 
 
+    def get_clinit_method(self):
+        return self.get_static_method('<clinit>', '()V')
+
+
     def get_static_method(self, name, descriptor):
         for method in self.__methods:
             if method.is_static and name == method.name and descriptor == method.descriptor:
                 return method
 
         return None
+
 
     def __repr__(self):
         return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))

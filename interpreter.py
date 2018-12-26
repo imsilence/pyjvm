@@ -34,5 +34,5 @@ def loop(thread):
         instruction.fetch_operands(reader)
         frame.next_pc = reader.index
 
-        #print(frame.method.clazz.name, frame.method.name, pc, instruction)
+        print(frame.method.clazz.name, frame.method.name, pc, instruction)
         instruction.execute(frame)
