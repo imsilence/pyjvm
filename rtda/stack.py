@@ -27,10 +27,10 @@ class Stack(object):
         self.__stack.append(e)
 
 
-    def top(self):
+    def top(self, n=1):
         if len(self.__stack) == 0:
             raise StackEmpty()
-        return self.__stack[-1]
+        return self.__stack[-n]
 
 
     def __repr__(self):

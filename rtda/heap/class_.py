@@ -131,6 +131,10 @@ class Class(AccessMixin):
         return False
 
 
+    def is_superclass(self, clazz):
+        return clazz.is_subclass(self)
+
+
     def create_object(self):
         return Object(self, self.instance_var_count)
 
