@@ -6,10 +6,10 @@ from ..base import NoOperandsInstruction
 
 class RETURN(NoOperandsInstruction):
     def execute(self, frame):
-        thread = frame.treahd
+        thread = frame.thread
         current_frame = thread.pop_frame()
-        invoker_frame = thread.top_frame()
-        invoker_frame.push(current_frame.stack.pop())
+        invoker_frame = thread.current_frame()
+        invoker_frame.stack.push(current_frame.stack.pop())
 
 
 @register(opcode=0XAC)

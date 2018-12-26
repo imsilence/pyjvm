@@ -32,7 +32,6 @@ class ConstantPool(object):
                 consts.append(info.val)
             elif isinstance(info, (ConstantLongInfo, ConstantDoubleInfo)):
                 consts.append(info.val)
-                consts.append(info.val)
             elif isinstance(info, ConstantClassInfo):
                 consts.append(ClassRef(self, info))
             elif isinstance(info, ConstantFieldrefInfo):
@@ -52,6 +51,15 @@ class ConstantPool(object):
     @property
     def clazz(self):
         return self.__clazz
+
+
+    @property
+    def consts(self):
+        return self.__consts
+
+
+    def __repr__(self):
+        return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))
 
 
 class SymRef(object):
@@ -157,11 +165,6 @@ class MethodRef(MemberRef):
 
     @property
     def method(self):
-        return self.__method
-
-
-    @method.setter
-    def method(self, method):
         if self.__method is None:
             pclazz = self.constant_pool.clazz
             clazz = self.clazz
@@ -191,7 +194,6 @@ class MethodRef(MemberRef):
 
     @classmethod
     def lookup_in_class(cls, clazz, name, descriptor):
-        clazz = self
         while clazz:
             for method in clazz.methods:
                 if name == method.name and descriptor == method.descriptor:

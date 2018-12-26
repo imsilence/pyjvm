@@ -105,6 +105,11 @@ class Class(AccessMixin):
 
 
     @property
+    def methods(self):
+        return self.__methods
+
+
+    @property
     def static_vars(self):
         return self.__static_vars
 
@@ -146,7 +151,7 @@ class Class(AccessMixin):
         if self.is_interface:
             clazz.is_subclass(self)
         else:
-            clazz.is_implement(self)
+            clazz.is_implements(self)
 
 
     def is_subinterface(self, interface):
@@ -156,7 +161,7 @@ class Class(AccessMixin):
         return False
 
 
-    def is_implement(self, interface):
+    def is_implements(self, interface):
         clazz = self
         while clazz:
             for _interface in clazz.interfaces:
@@ -177,3 +182,7 @@ class Class(AccessMixin):
                 return method
 
         return None
+
+    def __repr__(self):
+        return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))
+

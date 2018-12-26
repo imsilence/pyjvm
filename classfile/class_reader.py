@@ -51,7 +51,7 @@ class ClassByte(object):
 
 class ClassReader(object):
 
-    def __init__(self, data):
+    def __init__(self, data=b''):
         self.__index = 0
         self.__data = data
 
@@ -61,6 +61,11 @@ class ClassReader(object):
 
     @index.setter
     def index(self, index):
+        self.__index = index
+
+
+    def reset(self, data, index):
+        self.__data = data
         self.__index = index
 
     def read_byte(self, n):
@@ -105,5 +110,6 @@ class ClassReader(object):
     def read_64_bytes(self, n=None):
         return self.read_bytes(n, ByteSize.U4.value)
 
+    @property
     def data(self):
         return self.__data[self.__index:]

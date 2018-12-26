@@ -10,7 +10,7 @@ def interpret(method):
     frame = thread.create_frame(method)
     thread.push_frame(frame)
     try:
-        loop(thread, method.code)
+        loop(thread)
     except Exception as e:
         print(e)
         print(traceback.format_exc())
@@ -19,20 +19,20 @@ def interpret(method):
         print(frame.vars)
 
 
-def loop(thread, code):
-    frame = thread.pop_frame()
-    reader = ClassReader(code)
+def loop(thread):
 
-    while True:
+    reader = ClassReader()
+    while len(thread.stack) > 0:
+        frame = thread.current_frame()
         pc = frame.next_pc
         thread.pc = pc
 
-        reader.index = pc
+        reader.reset(frame.method.code, pc)
 
         opcode = reader.read_8_byte()
         instruction = InstructionFactory.get_instruction(int(opcode))
         instruction.fetch_operands(reader)
         frame.next_pc = reader.index
 
-        print(pc, instruction)
+        #print(frame.method.clazz.name, frame.method.name, pc, instruction)
         instruction.execute(frame)

@@ -9,7 +9,6 @@ class LCMP(NoOperandsInstruction):
     def execute(self, frame):
         right = frame.stack.pop()
         left = frame.stack.pop()
-
         if left > right:
             value = 1
         elif left == right:

@@ -33,5 +33,9 @@ class Stack(object):
         return self.__stack[-n]
 
 
+    def __len__(self):
+        return len(self.__stack)
+
+
     def __repr__(self):
         return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))

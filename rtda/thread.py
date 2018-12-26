@@ -20,6 +20,11 @@ class Thread(object):
         self.__pc = pc
 
 
+    @property
+    def stack(self):
+        return self.__stack
+
+
     def create_frame(self, method):
         return Frame(self, method)
 

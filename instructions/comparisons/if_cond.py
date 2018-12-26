@@ -7,42 +7,42 @@ from ..base import BranchInstruction
 class IFEQ(BranchInstruction):
 
     def is_branch(self, frame):
-        return 0 == frame.stack.pop()
+        return frame.stack.pop() != 0
 
 
 @register(opcode=0X9A)
 class IFNE(BranchInstruction):
 
     def is_branch(self, frame):
-        return 0 != frame.stack.pop()
+        return frame.stack.pop() != 0
 
 
 @register(opcode=0X9B)
 class IFLT(BranchInstruction):
 
     def is_branch(self, frame):
-        return 0 < frame.stack.pop()
+        return frame.stack.pop() < 0
 
 
 @register(opcode=0X9C)
 class IFGE(BranchInstruction):
 
     def is_branch(self, frame):
-        return 0 >= frame.stack.pop()
+        return frame.stack.pop() >= 0
 
 
 @register(opcode=0X9D)
 class IFGT(BranchInstruction):
 
     def is_branch(self, frame):
-        return 0 > frame.stack.pop()
+        return frame.stack.pop() > 0
 
 
 @register(opcode=0X9E)
 class IFLE(BranchInstruction):
 
     def is_branch(self, frame):
-        return 0 <= frame.stack.pop()
+        return frame.stack.pop() <= 0
 
 
 

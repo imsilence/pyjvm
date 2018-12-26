@@ -59,7 +59,7 @@ class ClassField(ClassMember):
         attr = member.constant_value_attr
 
         self.__index = 0
-        self.__const_value_index = attr.constant_value_index if attr else 0
+        self.__const_value_index = int(attr.constant_value_index) if attr else 0
 
 
     @property
@@ -110,23 +110,24 @@ class ClassMethod(ClassMember):
     @property
     def signature(self):
         if self.__signature is None:
-            self.__signature = MethodSignature.parse(self.descriptor)
+            self.__signature = MethodSignature.parse(self)
 
         return self.__signature
 
 
 class MethodSignature(object):
 
-    def __init__(self):
+    def __init__(self, method):
+        self.__method = method
         self.__param_types = []
         self.__return_type = None
 
 
     @classmethod
-    def parse(self, descriptor):
-        signature = MethodSignature()
+    def parse(self, method):
+        signature = MethodSignature(method)
 
-        param_desc, return_desc = descriptor.split(')')
+        param_desc, return_desc = method.descriptor.split(')')
 
         signature.__return_type = return_desc
 
@@ -136,21 +137,20 @@ class MethodSignature(object):
 
         while param_desc:
             _pox = 0
-            if param_type[0] == 'L':
+            if param_desc[0] == 'L':
                 _pox = param_desc.find(';')
                 param_type.append(param_desc[1:_pox])
                 signature.__param_types.append(''.join(param_type))
                 param_type = []
-            elif param_type[0] == '[':
+            elif param_desc[0] == '[':
                 param_type.append('[')
             else:
-                param_type.append(param_type[0])
+                param_type.append(param_desc[0])
                 signature.__param_types.append(''.join(param_type))
                 param_type = []
 
             param_desc = param_desc[_pox + 1:]
 
-        self.__return_type = return_type
         return signature
 
 
@@ -164,4 +164,11 @@ class MethodSignature(object):
         return self.__return_type
 
 
+    @property
+    def var_count(self):
+        return len(self.param_types) + 1 if self.__method.is_static else 0
+
+
+    def __repr__(self):
+        return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))
 

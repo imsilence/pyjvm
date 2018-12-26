@@ -9,5 +9,4 @@ class LDC(Index8Instruction):
 
     def execute(self, frame):
         constant_pool = frame.method.clazz.constant_pool
-        value = constant_pool[self.index]
-        frame.stack.push(value)
+        frame.stack.push(constant_pool[self.index])

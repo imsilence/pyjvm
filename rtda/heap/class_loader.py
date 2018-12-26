@@ -80,5 +80,5 @@ class ClassLoader(object):
         constant_pool = clazz.constant_pool
 
         for field in clazz.fields:
-            if field.is_static and field.is_final:
+            if field.is_static and field.is_final and field.const_value_index > 0:
                 clazz.static_vars[field.index] = constant_pool[field.const_value_index]

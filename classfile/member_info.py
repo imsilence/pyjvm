@@ -65,7 +65,7 @@ class Member(ABC):
     @property
     def constant_value_attr(self):
         for attr in self.attrs:
-            if instance(attr, AttributeConstantValueInfo):
+            if isinstance(attr, AttributeConstantValueInfo):
                 return attr
         return None
 
