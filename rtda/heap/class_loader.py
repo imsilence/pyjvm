@@ -2,6 +2,7 @@
 
 from classfile import ClassFile
 from .class_ import Class
+from .array_class import ArrayTypeFlag
 from .string import StringFactory
 
 class ClassLoader(object):
@@ -9,6 +10,27 @@ class ClassLoader(object):
     def __init__(self, class_path):
         self.__class_path = class_path
         self.__clazzes = {}
+        self.__init_base_class()
+        self.__init_primitive_class()
+
+
+    def __init_base_class(self):
+        base_class = self.load("java/lang/Class")
+        for name, clazz in self.__clazzes.items():
+            if clazz.base_class:
+                continue
+            clazz.base_class = base_class.create_object()
+            clazz.base_class.extra = clazz
+
+
+    def __init_primitive_class(self):
+        for class_name in ArrayTypeFlag.__members__:
+            class_name = class_name.lower()
+            clazz = Class()
+            clazz.init_class_primitive(class_name, self)
+            clazz.base_class = self.__clazzes.get("java/lang/Class").create_object()
+            clazz.base_class.extra = clazz
+            self.__clazzes[class_name] = clazz
 
 
     def load(self, class_name):
@@ -18,6 +40,11 @@ class ClassLoader(object):
                 clazz = self.__load_array_class(class_name)
             else:
                 clazz = self.__load_normal_class(class_name)
+
+            base_class = self.__clazzes.get("java/lang/Class")
+            if base_class:
+                clazz.base_class = base_class.create_object()
+                clazz.base_class.extra = clazz
             self.__clazzes[class_name] = clazz
 
         return clazz

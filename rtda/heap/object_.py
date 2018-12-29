@@ -8,6 +8,7 @@ class Object(ArrayObjectMixin, object):
     def __init__(self, clazz, fields):
         self.__clazz = clazz
         self.__fields = fields
+        self.__extra = None
 
 
     def is_instance_of(self, clazz):
@@ -22,6 +23,16 @@ class Object(ArrayObjectMixin, object):
     @property
     def fields(self):
         return self.__fields
+
+
+    @property
+    def extra(self):
+        return self.__extra
+
+
+    @extra.setter
+    def extra(self, extra):
+        self.__extra = extra
 
 
     def __str__(self):

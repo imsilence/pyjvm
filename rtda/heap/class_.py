@@ -24,6 +24,7 @@ class Class(AccessMixin, ArrayClassMixin):
         self.__static_var_count = 0
         self.__static_vars = None
         self.__inited = False
+        self.__base_class = None
 
 
     def init_class_file(self, class_file):
@@ -34,6 +35,13 @@ class Class(AccessMixin, ArrayClassMixin):
         self.__constant_pool = ConstantPool(self, class_file.constant_pool)
         self.__fields = [ClassField(self, field) for field in class_file.fields]
         self.__methods = [ClassMethod(self, method) for method in class_file.methods]
+
+
+    def init_class_primitive(self, name, loader):
+        self.loader = loader
+        self.access_flags = AccessFlags.PUBLIC.value
+        self.name = name
+        self.inited = True
 
 
     @property
@@ -54,6 +62,11 @@ class Class(AccessMixin, ArrayClassMixin):
     @name.setter
     def name(self, name):
         self.__name = name
+
+
+    @property
+    def java_name(self):
+        return self.__name.replace('/', '.')
 
 
     @property
@@ -172,6 +185,16 @@ class Class(AccessMixin, ArrayClassMixin):
     @inited.setter
     def inited(self, value=True):
         self.__inited = value
+
+
+    @property
+    def base_class(self):
+        return self.__base_class
+
+
+    @base_class.setter
+    def base_class(self, base_class):
+        self.__base_class = base_class
 
 
     def alloc_static_vars(self):

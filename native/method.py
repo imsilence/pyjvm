@@ -17,8 +17,8 @@ class MethodFactory(object):
         return method
 
 
-def register(opcode):
-    def wrapper(cls, class_name, method_name, descriptor):
+def register(class_name, method_name, descriptor):
+    def wrapper(cls):
         key = '{1}.{2}.{3}'.format(class_name, method_name, descriptor)
         MethodFactory.METHOD_MAP[key] = cls
         return cls
