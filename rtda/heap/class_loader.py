@@ -13,11 +13,25 @@ class ClassLoader(object):
     def load(self, class_name):
         clazz = self.__clazzes.get(class_name)
         if clazz is None:
-            clazz = self.__load_class(class_name)
-            self.__verify(clazz)
-            self.__prepare(clazz)
+            if class_name.startswith('['):
+                clazz = self.__load_array_class(class_name)
+            else:
+                clazz = self.__load_normal_class(class_name)
             self.__clazzes[class_name] = clazz
 
+        return clazz
+
+
+    def __load_array_class(self, class_name):
+        clazz = Class()
+        clazz.init_class_array(class_name, self)
+        return clazz
+
+
+    def __load_normal_class(self, class_name):
+        clazz = self.__load_class(class_name)
+        self.__verify(clazz)
+        self.__prepare(clazz)
         return clazz
 
 
@@ -25,8 +39,8 @@ class ClassLoader(object):
         class_bytes = self.__class_path.read_class(class_name)
         class_file = ClassFile.parse(class_bytes)
 
-
-        clazz = Class(class_file)
+        clazz = Class()
+        clazz.init_class_file(class_file)
         clazz.loader = self
         if clazz.name != 'java/lang/Object':
             clazz.super_class = self.load(clazz.super_class_name)

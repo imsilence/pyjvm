@@ -124,10 +124,12 @@ class MethodSignature(object):
 
 
     @classmethod
-    def parse(self, method):
+    def parse(self, method=None, descriptor=None):
         signature = MethodSignature(method)
 
-        param_desc, return_desc = method.descriptor.split(')')
+        descriptor = method.descriptor if method else descriptor
+
+        param_desc, return_desc = descriptor.split(')')
 
         signature.__return_type = return_desc
 

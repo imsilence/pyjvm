@@ -11,3 +11,6 @@ from . import invokespecial
 from . import invokevirtual
 from . import invokestatic
 from . import invokeinterface
+from . import newarray
+from . import anewarray
+from . import arraylength

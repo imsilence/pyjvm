@@ -3,12 +3,12 @@
 from .. import register
 from ..base import IndexInstruction
 from ..exceptions import InstructionException
-from .invoke import Invoke
+from .invoke import InvokeMixin
 from rtda.heap import MethodRef
 
 
 @register(opcode=0XB9)
-class INVOKE_INTERFACE(Invoke, IndexInstruction):
+class INVOKE_INTERFACE(InvokeMixin, IndexInstruction):
 
     def __init__(self):
         super(INVOKE_INTERFACE, self).__init__()
@@ -23,8 +23,8 @@ class INVOKE_INTERFACE(Invoke, IndexInstruction):
 
 
     def execute(self, frame):
-        current_clazz = frame.method.clazz
-        method_ref = current_clazz.constant_pool[self.index]
+        current_class = frame.method.clazz
+        method_ref = current_class.constant_pool[self.index]
         clazz = method_ref.clazz
         method = method_ref.method
 
@@ -39,7 +39,7 @@ class INVOKE_INTERFACE(Invoke, IndexInstruction):
             raise InstructionException('ref {0}.{1} None'.format(method.clazz.name, method.name))
 
         if not ref.clazz.is_implements(clazz):
-            raise InstructionException('class {0} not vist method {1}.{2} access'.format(current_clazz.name, method.clazz.name, method.name))
+            raise InstructionException('class {0} not vist method {1}.{2} access'.format(current_class.name, method.clazz.name, method.name))
 
         method = MethodRef.lookup(ref.clazz, method_ref.name, method_ref.descriptor)
 

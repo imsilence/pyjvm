@@ -1,6 +1,6 @@
 #encoding: utf-8
 
-class Init(object):
+class InitMixin(object):
 
     def init_clazz(self, thread, clazz):
         clazz.inited = True

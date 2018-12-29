@@ -3,10 +3,10 @@
 from .. import register
 from ..base import Index16Instruction
 from ..exceptions import InstructionException
-from . init import Init
+from . init import InitMixin
 
 @register(opcode=0XB3)
-class PUT_STATIC(Init, Index16Instruction):
+class PUT_STATIC(InitMixin, Index16Instruction):
 
     def execute(self, frame):
         current_method = frame.method

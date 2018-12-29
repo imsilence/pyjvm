@@ -5,17 +5,18 @@ from .class_member import ClassField, ClassMethod
 from ..vars_ import Vars
 from .constant_pool import ConstantPool
 from .object_ import Object
+from .array_class import ArrayClassMixin
 
-class Class(AccessMixin):
+class Class(AccessMixin, ArrayClassMixin):
 
-    def __init__(self, class_file):
-        self.__access_flags = int(class_file.access_flags)
-        self.__name = class_file.class_name
-        self.__super_class_name = class_file.super_class_name
-        self.__interface_names = class_file.interface_names
-        self.__constant_pool = ConstantPool(self, class_file.constant_pool)
-        self.__fields = [ClassField(self, field) for field in class_file.fields]
-        self.__methods = [ClassMethod(self, method) for method in class_file.methods]
+    def __init__(self):
+        self.__access_flags = 0
+        self.__name = ''
+        self.__super_class_name = ''
+        self.__interface_names = []
+        self.__constant_pool = None
+        self.__fields = []
+        self.__methods = []
         self.__loader = None
         self.__super_class = None
         self.__interfaces = []
@@ -25,9 +26,24 @@ class Class(AccessMixin):
         self.__inited = False
 
 
+    def init_class_file(self, class_file):
+        self.__access_flags = int(class_file.access_flags)
+        self.__name = class_file.class_name
+        self.__super_class_name = class_file.super_class_name
+        self.__interface_names = class_file.interface_names
+        self.__constant_pool = ConstantPool(self, class_file.constant_pool)
+        self.__fields = [ClassField(self, field) for field in class_file.fields]
+        self.__methods = [ClassMethod(self, method) for method in class_file.methods]
+
+
     @property
     def access_flags(self):
         return self.__access_flags
+
+
+    @access_flags.setter
+    def access_flags(self, access_flags):
+        self.__access_flags = access_flags
 
 
     @property
@@ -35,9 +51,19 @@ class Class(AccessMixin):
         return self.__name
 
 
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
+
     @property
     def super_class_name(self):
         return self.__super_class_name
+
+
+    @super_class_name.setter
+    def super_class_name(self, super_class_name):
+        self.__super_class_name = super_class_name
 
 
     @property
@@ -68,6 +94,11 @@ class Class(AccessMixin):
     @property
     def interface_names(self):
         return self.__interface_names
+
+
+    @interface_names.setter
+    def interface_names(self, interface_names):
+        self.__interface_names = interface_names
 
 
     @property
@@ -113,6 +144,8 @@ class Class(AccessMixin):
     @property
     def static_vars(self):
         return self.__static_vars
+
+
     @property
     def package_name(self):
         return self.name.rpartition('/')[0]
@@ -150,17 +183,33 @@ class Class(AccessMixin):
 
 
     def create_object(self):
-        return Object(self, self.instance_var_count)
+        return Object(self, self, Vars(self.instance_var_count))
 
 
     def is_assignable(self, clazz):
         if self == clazz:
             return True
 
-        if self.is_interface:
-            clazz.is_subclass(self)
+        if clazz.is_array:
+            if self.is_array:
+                self.component_class.is_assignable(clazz.component_class)
+            else:
+                if self.is_interface:
+                    pass
+                else:
+                    pass
         else:
-            clazz.is_implements(self)
+            if clazz.is_interface:
+                if self.is_interface:
+                    return clazz.is_implements(self)
+                else:
+                    return clazz.is_subclass(self)
+            else:
+                if self.is_interface:
+                    pass
+                else:
+                    pass
+
 
 
     def is_subinterface(self, interface):

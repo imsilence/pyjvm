@@ -11,6 +11,6 @@ class CHECK_CAST(Index16Instruction):
         object_ = frame.stack.top()
         if object_:
             constant_pool = frame.method.clazz.constant_pool
-            clazz_ref = constant_pool[self.index]
-            if not object_.is_instance_of(clazz_ref.clazz):
-                raise InstructionException('object {0} is not class {1} instance'.format(object_.clazz.name, clazz_ref.clazz.name))
+            class_ref = constant_pool[self.index]
+            if not object_.is_instance_of(class_ref.clazz):
+                raise InstructionException('object {0} is not class {1} instance'.format(object_.clazz.name, class_ref.clazz.name))

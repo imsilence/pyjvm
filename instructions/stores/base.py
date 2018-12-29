@@ -1,7 +1,7 @@
 #encoding: utf-8
 
 from ..base import NoOperandsInstruction, Index8Instruction
-
+from ..exceptions import InstructionException
 
 class STORE(Index8Instruction):
 
@@ -31,3 +31,20 @@ class STORE_3(NoOperandsInstruction):
 
     def execute(self, frame):
         frame.vars[3] = frame.stack.pop()
+
+
+class XASTORE(NoOperandsInstruction):
+
+    def execute(self, frame):
+        value = frame.stack.pop()
+        index = frame.stack.pop()
+        array = frame.stack.pop()
+
+        if array is None:
+            raise InstructionException('array is None')
+
+
+        if index < 0 or index >= len(array):
+            raise InstructionException('array index error')
+
+        array[index] = value

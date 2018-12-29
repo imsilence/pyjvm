@@ -3,11 +3,11 @@
 from .. import register
 from ..base import Index16Instruction
 from ..exceptions import InstructionException
-from .invoke import Invoke
+from .invoke import InvokeMixin
 
 
 @register(opcode=0XB8)
-class INVOKE_STATIC(Invoke, Index16Instruction):
+class INVOKE_STATIC(InvokeMixin, Index16Instruction):
 
     def execute(self, frame):
         clazz = frame.method.clazz

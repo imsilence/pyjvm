@@ -1,12 +1,13 @@
 #encoding: utf-8
 
 from ..vars_ import Vars
+from .array_object import ArrayObjectMixin
 
-class Object(object):
+class Object(ArrayObjectMixin, object):
 
-    def __init__(self, clazz, count):
+    def __init__(self, clazz, fields):
         self.__clazz = clazz
-        self.__fields = Vars(count)
+        self.__fields = fields
 
 
     def is_instance_of(self, clazz):
@@ -21,3 +22,7 @@ class Object(object):
     @property
     def fields(self):
         return self.__fields
+
+
+    def __str__(self):
+        return '<{0!r}>{1!r}'.format(self.clazz.name, [str(field) for field in self.fields])

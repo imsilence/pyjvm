@@ -2,7 +2,7 @@
 
 from ..exceptions import InstructionException
 
-class Invoke(object):
+class InvokeMixin(object):
 
     def invoke_method(self, frame, method):
 

@@ -3,10 +3,10 @@
 from .. import register
 from ..base import Index16Instruction
 from ..exceptions import InstructionException
-from . init import Init
+from . init import InitMixin
 
 @register(opcode=0XB2)
-class GET_STATIC(Init, Index16Instruction):
+class GET_STATIC(InitMixin, Index16Instruction):
 
     def execute(self, frame):
         field = frame.method.clazz.constant_pool[self.index].field

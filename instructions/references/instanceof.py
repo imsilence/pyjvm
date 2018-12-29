@@ -13,8 +13,8 @@ class INSTANCE_OF(Index16Instruction):
             frame.stack.push(0)
         else:
             constant_pool = frame.method.clazz.constant_pool
-            clazz_ref = constant_pool[self.index]
-            if object_.is_instance_of(clazz_ref.clazz):
+            class_ref = constant_pool[self.index]
+            if object_.is_instance_of(class_ref.clazz):
                 frame.stack.push(1)
             else:
                 frame.stack.push(0)
