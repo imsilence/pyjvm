@@ -91,6 +91,9 @@ class ClassMethod(ClassMember):
             self.__max_locals = method.code_attr.max_locals
             self.__code = method.code_attr.code.byte
 
+        if self.is_native:
+            self.__inject()
+
 
     @property
     def max_stack(self):
@@ -113,6 +116,24 @@ class ClassMethod(ClassMember):
             self.__signature = MethodSignature.parse(self)
 
         return self.__signature
+
+
+    def __inject(self):
+        codes = {
+            'V' : b'\xfe\xb1', # return
+            'D' : b'\xfe\xaf', # dreturn
+            'F' : b'\xfe\xae', # freturn
+            'J' : b'\xfe\xad', # lreturn
+            'L' : b'\xfe\xb0', # areturn
+        }
+
+
+        default_code = b'\xfe\xac' # ireturn
+        signature = self.signature
+
+        self.__max_stack = 4
+        self.__max_locals = signature.var_count
+        self.__code = codes.get(signature.return_type, default_code)
 
 
 class MethodSignature(object):
