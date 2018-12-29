@@ -136,6 +136,19 @@ class Class(AccessMixin, ArrayClassMixin):
         return self.__fields
 
 
+    def get_field(self, name, descriptor, is_static):
+        clazz = self
+        while clazz:
+            for field in clazz.__fields:
+                if field.is_static == is_static and \
+                    field.name == name and \
+                    field.descriptor == descriptor:
+                    return field
+            clazz = clazz.super_class
+
+        return None
+
+
     @property
     def methods(self):
         return self.__methods
@@ -183,7 +196,7 @@ class Class(AccessMixin, ArrayClassMixin):
 
 
     def create_object(self):
-        return Object(self, self, Vars(self.instance_var_count))
+        return Object(self, Vars(self.instance_var_count))
 
 
     def is_assignable(self, clazz):

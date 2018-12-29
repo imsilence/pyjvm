@@ -2,6 +2,7 @@
 
 from classfile import ClassFile
 from .class_ import Class
+from .string import StringFactory
 
 class ClassLoader(object):
 
@@ -95,4 +96,7 @@ class ClassLoader(object):
 
         for field in clazz.fields:
             if field.is_static and field.is_final and field.const_value_index > 0:
-                clazz.static_vars[field.index] = constant_pool[field.const_value_index]
+                value = constant_pool[field.const_value_index]
+                if field.descriptor in ['Ljava/lang/String']:
+                    value = StringFactory.get(clazz.loader, value)
+                clazz.static_vars[field.index] = value

@@ -19,7 +19,7 @@ class INVOKE_VIRTUAL(InvokeMixin, Index16Instruction):
         ref = frame.stack.top(method.signature.var_count)
         print(method.clazz.name, method.name)
         if ref is None:
-            if method_ref.name == 'println':
+            if method_ref.name in ['println', 'print']:
                 print('-' * 10)
                 print(method_ref.descriptor)
                 print(frame.stack.pop())

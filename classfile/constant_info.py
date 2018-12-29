@@ -246,3 +246,54 @@ class ConstantMethodrefInfo(ConstantRefInfo):
 class ConstantInterfaceMethodrefInfo(ConstantRefInfo):
     pass
 
+
+class ConstantMethodHandleInfo(ConstantInfo):
+
+    def __init__(self, constant_pool):
+        super(ConstantMethodHandleInfo, self).__init__(constant_pool)
+        self.__reference_kind = 0
+        self.__reference_index = 0
+
+
+    def read(self, reader):
+        self.__reference_kind = reader.read_8_byte()
+        self.__reference_index = reader.read_16_byte()
+
+
+    @property
+    def val(self):
+        return self.__reference_kind, self.__reference_index
+
+
+class ConstantMethodTypeInfo(ConstantInfo):
+
+    def __init__(self, constant_pool):
+        super(ConstantMethodTypeInfo, self).__init__(constant_pool)
+        self.__descriptor_index = 0
+
+
+    def read(self, reader):
+        self.__descriptor_index = int(reader.read_16_byte())
+
+
+    @property
+    def val(self):
+        return self.__descriptor_index
+
+
+class ConstantInvokeDynamicInfo(ConstantInfo):
+
+    def __init__(self, constant_pool):
+        super(ConstantInvokeDynamicInfo, self).__init__(constant_pool)
+        self.__bootstrap_mathed_attr_index = 0
+        self.__name_and_type_index = 0
+
+
+    def read(self, reader):
+        self.__bootstrap_mathed_attr_index = reader.read_16_byte()
+        self.__name_and_type_index = reader.read_16_byte()
+
+
+    @property
+    def val(self):
+        return self.__bootstrap_mathed_attr_index, self.__name_and_type_index
