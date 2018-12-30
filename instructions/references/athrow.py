@@ -45,5 +45,5 @@ class ATHROW(NoOperandsInstruction):
         string = StringFactory.object_2_string(obj)
 
         print('{0}:{1}'.format(exception.clazz.java_name, string))
-        for line in obj.extra:
+        for line in exception.extra:
             print(line)

@@ -18,15 +18,15 @@ class INVOKE_VIRTUAL(InvokeMixin, Index16Instruction):
 
         ref = frame.stack.top(method.signature.var_count)
         if ref is None:
-            if method_ref.name in ['println', 'print']:
-                print('-' * 10)
-                print(method_ref.descriptor)
-                if method_ref.descriptor in ['(Ljava/lang/String;)V']:
-                    print(StringFactory.object_2_string(frame.stack.pop()))
-                else:
-                    print(frame.stack.pop())
-                print(frame.stack.pop())
-                return
+            # if method_ref.name in ['println', 'print']:
+            #     print('-' * 10)
+            #     print(method_ref.descriptor)
+            #     if method_ref.descriptor in ['(Ljava/lang/String;)V']:
+            #         print(StringFactory.object_2_string(frame.stack.pop()))
+            #     else:
+            #         print(frame.stack.pop())
+            #     print(frame.stack.pop())
+            #     return
             raise InstructionException('ref {0}.{1} None'.format(method.clazz.name, method.name))
 
         if method.is_protected and method.clazz.is_superclass(current_class) and \

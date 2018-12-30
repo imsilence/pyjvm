@@ -157,15 +157,12 @@ class Class(AccessMixin, ArrayClassMixin):
 
 
     def get_field(self, name, descriptor, is_static):
-        print('*' * 20, name, descriptor, is_static)
         clazz = self
         while clazz:
             for field in clazz.__fields:
-                print('#' * 20, field.name, field.descriptor, field.is_static)
                 if field.is_static == is_static and \
                     field.name == name and \
                     field.descriptor == descriptor:
-                    print('#################################')
                     return field
             clazz = clazz.super_class
 

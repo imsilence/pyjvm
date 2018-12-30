@@ -9,4 +9,7 @@ class MethodInitialize(InvokeMixin, Method):
 
     @classmethod
     def execute(cls, frame):
-        pass
+        loader = frame.method.clazz.loader
+        clazz = loader.load('java/lang/System')
+        method = clazz.get_static_method("initializeSystemClass", "()V")
+        self.invoke_method(frame, method)

@@ -8,10 +8,10 @@ from native.exceptions import MethodException
 class StrackTraceElement(object):
 
     def __init__(self, file_name, class_name, method_name, line_number):
-        self.__file_name = ''
-        self.__class_name = ''
-        self.__method_name = ''
-        self.__line_number = 0
+        self.__file_name = file_name
+        self.__class_name = class_name
+        self.__method_name = method_name
+        self.__line_number = line_number
 
 
     def __repr__(self):
@@ -24,14 +24,12 @@ class MethodFillInStackTrace(Method):
     @classmethod
     def execute(cls, frame):
         this = frame.vars[0]
-        print(this.clazz.name)
         frame.stack.push(this)
 
         traces = []
 
         for frame in frame.thread.frames:
             method = frame.method
-            print(type(method))
             clazz = method.clazz
             traces.append(StrackTraceElement(
                 clazz.source_file,
