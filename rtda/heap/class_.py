@@ -5,7 +5,7 @@ from .class_member import ClassField, ClassMethod
 from ..vars_ import Vars
 from .constant_pool import ConstantPool
 from .object_ import Object
-from .array_class import ArrayClassMixin
+from .array_class import ArrayClassMixin, ArrayTypeFlag
 
 class Class(AccessMixin, ArrayClassMixin):
 
@@ -42,6 +42,11 @@ class Class(AccessMixin, ArrayClassMixin):
         self.access_flags = AccessFlags.PUBLIC.value
         self.name = name
         self.inited = True
+
+
+    @property
+    def is_primitive(self):
+        return ArrayTypeFlag.element(self.name) is not None
 
 
     @property

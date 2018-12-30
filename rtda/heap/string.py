@@ -22,6 +22,15 @@ class StringFactory(object):
 
 
     @classmethod
+    def get_from_object(cls, object_):
+        string = cls.object_2_string(object_)
+        if cls.__interneds.get(string) is None:
+            cls.__interneds[string] = object_
+
+        return cls.__interneds[string]
+
+
+    @classmethod
     def utf8_2_utf16(cls, string):
         return list(string.encode('utf-16'))
 
