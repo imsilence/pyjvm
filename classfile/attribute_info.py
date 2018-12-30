@@ -102,8 +102,21 @@ class AttributeCodeInfo(AttributeInfo):
 
 
     @property
+    def exceptions(self):
+        return self.__exceptions
+
+
+    @property
     def val(self):
         return int(self.__max_stack), int(self.__max_locals), self.__code, self.__exceptions, self.__attrs
+
+
+    @property
+    def line_number_table(self):
+        for attr in self.__attrs:
+            if isinstance(attr, AttributeLineNumberTableInfo):
+                return attr.val
+        return []
 
 
 class AttributeConstantValueInfo(AttributeInfo):

@@ -39,3 +39,18 @@ class Thread(object):
 
     def current_frame(self):
         return self.__stack.top()
+
+
+    @property
+    def frames(self):
+        frames = list(self.__stack.elements)
+        frames.reverse()
+        return frames
+
+
+    def clear_stack(self):
+        self.__stack.clear()
+
+
+    def is_empty_stack(self):
+        return len(self.__stack) == 0

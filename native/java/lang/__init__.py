@@ -6,3 +6,4 @@ from . import system
 from . import float_
 from . import double
 from . import string
+from . import throwable

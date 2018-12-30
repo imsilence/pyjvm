@@ -33,6 +33,16 @@ class Stack(object):
         return self.__stack[-n]
 
 
+    def clear(self):
+        while len(self.__stack) > 0:
+            self.__stack.pop()
+
+
+    @property
+    def elements(self):
+        return list(self.__stack)
+
+
     def __len__(self):
         return len(self.__stack)
 

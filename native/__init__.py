@@ -3,3 +3,4 @@
 from .method import register, MethodFactory
 
 from . import java
+from . import sun

@@ -14,3 +14,4 @@ from . import invokeinterface
 from . import newarray
 from . import anewarray
 from . import arraylength
+from . import athrow

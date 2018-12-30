@@ -2,6 +2,7 @@
 
 
 from .access_flags import AccessMixin
+from .exception_table import ExceptionTableEntry
 
 
 class ClassMember(AccessMixin):
@@ -85,11 +86,15 @@ class ClassMethod(ClassMember):
         self.__max_locals = 0
         self.__code = b''
         self.__signature = None
+        self.__exception_table = []
+        self.__line_number_table = []
 
         if method.code_attr:
             self.__max_stack = method.code_attr.max_stack
             self.__max_locals = method.code_attr.max_locals
             self.__code = method.code_attr.code.byte
+            self.__exception_table = [ExceptionTableEntry(self, clazz.constant_pool, exception) for exception in  method.code_attr.exceptions]
+            self.__line_number_table = method.code_attr.line_number_table
 
         if self.is_native:
             self.__inject()
@@ -134,6 +139,29 @@ class ClassMethod(ClassMember):
         self.__max_stack = 4
         self.__max_locals = signature.var_count + 1
         self.__code = codes.get(signature.return_type, default_code)
+
+
+    def find_exception_handler(self, exception, pc):
+        for entry in self.__exception_table:
+            if entry.start_pc <= pc and entry.end_pc >= pc:
+                if entry.catch_type is None:
+                    return entry.handler_pc
+                else:
+                    clazz = entry.catch_type.clazz
+                    if clazz == exception or clazz.is_superclass(exception):
+                        return entry.handler_pc
+
+        return -1
+
+
+    def find_line_number(self, pc):
+        if self.is_native:
+            return -2
+
+        for line in self.__line_number_table[::-1]:
+            if pc >= line.start_pc:
+                return line.line_number
+        return -1
 
 
 class MethodSignature(object):

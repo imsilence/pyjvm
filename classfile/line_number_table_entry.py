@@ -23,5 +23,16 @@ class LineNumberTableEntry(object):
         self.__start_pc = reader.read_16_byte()
         self.__line_number = reader.read_16_byte()
 
+
+    @property
+    def start_pc(self):
+        return int(self.__start_pc)
+
+
+    @property
+    def line_number(self):
+        return int(self.__line_number)
+
+
     def __repr__(self):
         return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))

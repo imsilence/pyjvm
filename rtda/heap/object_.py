@@ -41,5 +41,11 @@ class Object(ArrayObjectMixin, object):
     def copy(self):
         return Object(self.clazz, copy.deepcopy(self.fields), self.extra)
 
+
+    def get_field_var(self, name, descriptor):
+        field = self.__clazz.get_field(name, descriptor, False)
+        return self.__fields[field.index]
+
+
     def __str__(self):
         return '<{0!r}>{1!r}'.format(self.clazz.name, [str(field) for field in self.fields])

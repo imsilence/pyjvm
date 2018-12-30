@@ -21,11 +21,33 @@ class ExceptionTableEntry(object):
         self.__handler_pc = 0
         self.__catch_type = 0
 
+
     def read(self, reader):
         self.__start_pc = reader.read_16_byte()
         self.__end_pc = reader.read_16_byte()
         self.__handler_pc = reader.read_16_byte()
         self.__catch_type = reader.read_16_byte()
+
+
+    @property
+    def start_pc(self):
+        return int(self.__start_pc)
+
+
+    @property
+    def end_pc(self):
+        return int(self.__end_pc)
+
+
+    @property
+    def handler_pc(self):
+        return int(self.__handler_pc)
+
+
+    @property
+    def catch_type(self):
+        return int(self.__catch_type)
+
 
     def __repr__(self):
         return '<{0!r}>{1!r}'.format(self.__class__.__name__, vars(self))

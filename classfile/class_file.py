@@ -6,7 +6,7 @@ from .exceptions import ClassFormatException
 from .constant_info import ConstantPool
 from .class_reader import ClassReader
 from .member_info import MemberFactory, FieldInfo, MethodInfo
-from .attribute_info import AttributeFactory
+from .attribute_info import AttributeFactory, AttributeSourceFileInfo
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +76,14 @@ class ClassFile(object):
     @property
     def super_class_name(self):
         return self.constant_pool[self.__super_class].val if int(self.__super_class) > 0 else ""
+
+
+    @property
+    def source_file_attr(self):
+        for attr in self.__attrs:
+            if isinstance(attr, AttributeSourceFileInfo):
+                return attr
+        return None
 
 
     @classmethod

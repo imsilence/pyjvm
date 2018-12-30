@@ -25,6 +25,7 @@ class Class(AccessMixin, ArrayClassMixin):
         self.__static_vars = None
         self.__inited = False
         self.__base_class = None
+        self.__source_file = 'unknow'
 
 
     def init_class_file(self, class_file):
@@ -35,6 +36,7 @@ class Class(AccessMixin, ArrayClassMixin):
         self.__constant_pool = ConstantPool(self, class_file.constant_pool)
         self.__fields = [ClassField(self, field) for field in class_file.fields]
         self.__methods = [ClassMethod(self, method) for method in class_file.methods]
+        self.__source_file = class_file.source_file_attr.val if class_file.source_file_attr else 'unknow'
 
 
     def init_class_primitive(self, name, loader):
@@ -155,12 +157,15 @@ class Class(AccessMixin, ArrayClassMixin):
 
 
     def get_field(self, name, descriptor, is_static):
+        print('*' * 20, name, descriptor, is_static)
         clazz = self
         while clazz:
             for field in clazz.__fields:
+                print('#' * 20, field.name, field.descriptor, field.is_static)
                 if field.is_static == is_static and \
                     field.name == name and \
                     field.descriptor == descriptor:
+                    print('#################################')
                     return field
             clazz = clazz.super_class
 
@@ -200,6 +205,12 @@ class Class(AccessMixin, ArrayClassMixin):
     @base_class.setter
     def base_class(self, base_class):
         self.__base_class = base_class
+
+
+    @property
+    def source_file(self):
+        return self.__source_file
+
 
 
     def alloc_static_vars(self):
