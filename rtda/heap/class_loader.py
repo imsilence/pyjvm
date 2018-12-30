@@ -14,6 +14,12 @@ class ClassLoader(object):
         self.__init_primitive_class()
 
 
+    @property
+    def clazzes(self):
+        return self.__clazzes
+
+
+
     def __init_base_class(self):
         base_class = self.load("java/lang/Class")
         for name, clazz in self.__clazzes.items():
