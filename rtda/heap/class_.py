@@ -1,6 +1,6 @@
 #encoding: utf-8
 
-from .access_flags import AccessMixin
+from .access_flags import AccessMixin, AccessFlags
 from .class_member import ClassField, ClassMethod
 from ..vars_ import Vars
 from .constant_pool import ConstantPool

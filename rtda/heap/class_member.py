@@ -132,7 +132,7 @@ class ClassMethod(ClassMember):
         signature = self.signature
 
         self.__max_stack = 4
-        self.__max_locals = signature.var_count
+        self.__max_locals = signature.var_count + 1
         self.__code = codes.get(signature.return_type, default_code)
 
 
@@ -189,7 +189,7 @@ class MethodSignature(object):
 
     @property
     def var_count(self):
-        return len(self.param_types) + 1 if self.__method.is_static else 0
+        return len(self.param_types) if self.__method.is_static else len(self.param_types) + 1
 
 
     def __repr__(self):

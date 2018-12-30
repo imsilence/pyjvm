@@ -204,6 +204,7 @@ class MethodRef(MemberRef):
             for method in clazz.methods:
                 if name == method.name and descriptor == method.descriptor:
                     return method
+            clazz = clazz.super_class
         return None
 
 

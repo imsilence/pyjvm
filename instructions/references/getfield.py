@@ -16,6 +16,6 @@ class GET_FIELD(Index16Instruction):
         object_ = frame.stack.pop()
 
         if object_ is None:
-            raise InstructionException('object {0} is None'.format(object_.clazz.name))
+            raise InstructionException('object is None'.format(clazz.name))
 
         frame.stack.push(object_.fields[field.index])

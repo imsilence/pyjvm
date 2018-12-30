@@ -7,7 +7,8 @@ from rtda.heap import StringFactory
 @register(class_name="java/lang/Object", method_name="getClass", descriptor="()Ljava/lang/Class;")
 class MethodGetClass(Method):
 
-    def execute(self, frame):
+    @classmethod
+    def execute(cls, frame):
         this = frame.vars[0]
         clazz = this.clazz.base_class
         frame.stack.push(clazz)
@@ -16,7 +17,8 @@ class MethodGetClass(Method):
 @register(class_name="java/lang/Class", method_name="getPrimitiveClass", descriptor="(Ljava/lang/String;)Ljava/lang/Class;")
 class MethodGetPrimitiveClass(Method):
 
-    def execute(self, frame):
+    @classmethod
+    def execute(cls, frame):
         name_obj = frame.vars[0]
 
         name = StringFactory.object_2_string(frame.vars[0])
@@ -30,7 +32,8 @@ class MethodGetPrimitiveClass(Method):
 @register(class_name="java/lang/Class", method_name="getName0", descriptor="()Ljava/lang/String;")
 class MethodGetName0(Method):
 
-    def execute(self, frame):
+    @classmethod
+    def execute(cls, frame):
         this = frame.vars[0]
         clazz = this.extra
 
@@ -40,5 +43,6 @@ class MethodGetName0(Method):
 @register(class_name="java/lang/Class", method_name="desiredAssertionStatus0", descriptor="(Ljava/lang/Class;)Z")
 class MethodDesiredAssertionStatus0(Method):
 
-    def execute(self, frame):
+    @classmethod
+    def execute(cls, frame):
         frame.stack.push(False)

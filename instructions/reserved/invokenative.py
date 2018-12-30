@@ -12,4 +12,4 @@ class INVOKE_NATIVE(NoOperandsInstruction):
     def execute(self, frame):
         method = frame.method
         native_method = MethodFactory.get_method(method.clazz.name, method.name, method.descriptor)
-        native_method(frame)
+        native_method.execute(frame)

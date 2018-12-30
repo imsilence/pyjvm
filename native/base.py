@@ -1,15 +1,16 @@
 #encoding: utf-8
-from abc import ABC, abstractmethod
+from abc import ABC, abstractclassmethod
 
 
 class Method(ABC):
 
-    @abstractmethod
-    def execute(self, frame):
+    @abstractclassmethod
+    def execute(cls, frame):
         pass
 
 
 class EmptyMethod(Method):
 
-    def execute(self, frame):
+    @classmethod
+    def execute(cls, frame):
         pass

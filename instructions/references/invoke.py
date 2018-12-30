@@ -9,12 +9,8 @@ class InvokeMixin(object):
         thread = frame.thread
         new_frame = thread.create_frame(method)
         thread.push_frame(new_frame)
-        param_types = method.signature.param_types
-        for idx in range(len(param_types) - 1, -1, -1):
+
+        for idx in range(method.signature.var_count - 1, -1, -1):
             new_frame.vars[idx] = frame.stack.pop()
 
-        if method.is_native:
-            if method.name == 'registerNatives':
-                thread.pop_frame()
-            else:
-                raise InstructionException('method {0}.{1} is native'.format(method.clazz.name, method.name))
+
